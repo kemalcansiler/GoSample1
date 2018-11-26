@@ -11,13 +11,6 @@ func main() {
 
 	var gridLoad = 75.
 
-	/*fmt.Println("1) Generate Power Plant Report")
-	fmt.Println("2) Generate Power Grid Report")
-	fmt.Println("Please choose an option: ")
-
-	var option string
-	fmt.Scanln(&option)*/
-	//fmt.Println(option)
 	if option, err := requestOption(); err == nil {
 		fmt.Println("")
 
@@ -26,8 +19,6 @@ func main() {
 			generatePlantCapacityReprot(plantCapacities...)
 		case "2":
 			generatePowerGridReport(activePlants, plantCapacities, gridLoad)
-		default:
-			fmt.Println("sadsa")
 		}
 	} else {
 		fmt.Println(err.Error())
