@@ -8,7 +8,7 @@ import (
 
 func registerRoutes() *gin.Engine {
 	r := gin.Default()
-	r.LoadHTMLGlob("templates/**/*.html")
+	r.LoadHTMLGlob("../../templates/**/*.html")
 	r.GET("/", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "index.html", nil)
 	})
@@ -17,7 +17,24 @@ func registerRoutes() *gin.Engine {
 		c.HTML(http.StatusOK, "login.html", nil)
 	})
 
-	admin := r.Group("/admin")
+	r.GET("/employees/:id", func(c *gin.Context) {
+		id := c.Param("id")
+		timesOff, ok := TimesOff[id]
+
+		if !ok {
+			c.String(http.StatusNotFound, "404 - Page Not Found")
+			return
+		}
+
+		c.HTML(http.StatusOK, "vacation-overview.html",
+			map[string]interface{}{
+				"TimesOff": timesOff,
+			})
+	})
+
+	admin := r.Group("/admin", gin.BasicAuth(gin.Accounts{
+		"admin": "admin",
+	}))
 	admin.GET("/", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "admin-overview.html", nil)
 	})
