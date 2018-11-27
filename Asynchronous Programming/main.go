@@ -2,20 +2,33 @@ package main
 
 import (
 	"runtime"
-	"time"
 )
 
 func main() {
 	runtime.GOMAXPROCS(8)
-	go abcGen()
 
-	go println("this comes first!")
+	ch := make(chan string)
+	doneCh := make(chan bool)
 
-	time.Sleep(100 * time.Millisecond)
+	go abcGen(ch)
+	go printer(ch, doneCh)
+
+	println("this comes first!")
+
+	<-doneCh
 }
 
-func abcGen() {
+func abcGen(ch chan string) {
 	for l := byte('a'); l <= byte('z'); l++ {
-		go println(string(l))
+		ch <- string(l)
 	}
+
+	close(ch)
+}
+
+func printer(ch chan string, doneCh chan bool) {
+	for l := range ch {
+		println(l)
+	}
+	doneCh <- true
 }
