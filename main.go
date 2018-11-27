@@ -7,7 +7,6 @@ import (
 )
 
 func main() {
-	//plantCapacities := []float64{30, 30, 30, 60, 100}
 	plants := []PowerPlant{
 		PowerPlant{hydro, 300, active},
 		PowerPlant{wind, 30, active},
